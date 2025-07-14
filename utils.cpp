@@ -83,6 +83,12 @@ void CollisionTest() {
             PlaySound(Hit);
             Player.life--;
             
+            bool trigger = false;
+            for(int i=1; i<=90; ++i){
+                if(i == 90) trigger = true;
+                PlayDeathFlash(trigger);
+            }
+            
             if(Player.life <= 0) {
                 GameOverMenue();
                 return;
@@ -113,6 +119,43 @@ void RandomiseObsDim(int ith_obs) {
         Obstackle[topIndex].Obstackle.height = topHeight;
         Obstackle[topIndex].Obstackle.y = 0;
     }
+}
+
+void PlayDeathFlash(bool trigger)
+{
+    const int maxFlashHeight = SCREEN_H / 2;
+    bool playingFlash = true;
+    float flashTime = 0.0f;
+    const float flashDuration = 1.0f;
+    float dt = GetFrameTime();
+        // Trigger the flash with SPACE
+        if (trigger) {
+            playingFlash = true;
+            flashTime = 0.0f;
+        }
+
+    if (playingFlash) {
+            flashTime += dt;
+            if (flashTime >= flashDuration) {
+                playingFlash = false;
+                flashTime = 0.0f;
+            }
+        }
+
+    BeginDrawing();
+        if (playingFlash) {
+            float progress = flashTime / flashDuration;
+            int currentFlashHeight = (int)(progress * maxFlashHeight);
+
+            for (int i = -currentFlashHeight; i <= currentFlashHeight; i++) {
+                float alpha = 1.0f - (fabs(i) / (float)maxFlashHeight);  // Fade from center
+                alpha = Clamp(alpha, 0.0f, 1.0f); // Safety
+                unsigned char alphaByte = (unsigned char)(alpha * 255);
+                DrawRectangle(0, SCREEN_H / 2 + i, SCREEN_W, 1, (Color){255, 255, 255, alphaByte});
+            }
+        }
+    EndDrawing();
+
 }
 
 void UnloadGame() {

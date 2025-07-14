@@ -25,6 +25,10 @@ void GameOverMenue() {
         ClearBackground(RAYWHITE);
         
         // Draw frozen game state
+        DrawTexturePro(BackTexture, 
+            (Rectangle){0, 0,(float) BackTexture.width, (float) BackTexture.height}, 
+            (Rectangle){0, 0, SCREEN_W, SCREEN_H}, 
+            (Vector2){0, 0}, 0.0f, WHITE);
         DrawRectangleRec(Player.Player, Player.color);
         for(int i = 0; i < MAX_OBS; i++) DrawRectangleRec(Obstackle[i].Obstackle, Obstackle[i].color);
 

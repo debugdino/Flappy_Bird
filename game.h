@@ -53,3 +53,4 @@ void CollisionTest();
 void RandomiseObsDim(int ith_obs);
 void GameStartMenue();
 void LoadGame();
+void PlayDeathFlash(bool trigger);
