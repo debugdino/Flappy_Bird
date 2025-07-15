@@ -1,7 +1,13 @@
 #pragma once
 #include <string>
 #include <raylib.h>
-#include <raymath.h>
+#include <cmath>
+
+inline float Clamp(float value, float min, float max) {
+    if (value < min) return min;
+    if (value > max) return max;
+    return value;
+}
 
 // Global Declare
 #define MAX_OBS 10
@@ -13,8 +19,12 @@
 extern bool pause;
 extern Sound PlayerMoveS;
 extern Sound Hit;
-extern Image Background;
-extern Texture BackTexture;
+
+extern Texture2D BackGR;
+extern Texture2D PlayerSprite;
+extern Rectangle PlayerSource;
+
+
 
 // Class
 class PlayerClass { public:

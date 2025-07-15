@@ -4,19 +4,20 @@
 Sound PlayerMoveS;
 Sound Hit;
 
-Image Background;
-Texture BackTexture;
+Texture2D BackGR;
+Texture2D PlayerSprite;
+
 
 void InitGame() {
-    // Init Audio
+// Init Audio
     LoadGame();
 
     // Init Game Variables
     pause = false;
 
     // Init Player Variables
-    Player.height = 50;
-    Player.width = 50;
+    Player.height = 100;
+    Player.width = 100;
     Player.Player.height = Player.height;
     Player.Player.width = Player.width;
     Player.Player.x = 30;
@@ -25,13 +26,14 @@ void InitGame() {
     Player.color = GRAY;
 
     // Init Obstackle Variables for Bottom
-    for(int i=0; i<MAX_OBS/2; i++) {
+    for(int i=0; i<MAX_OBS; i++) {
         Obstackle[i].height = 200;
         Obstackle[i].width = 50;
         Obstackle[i].Obstackle.height = Obstackle[i].height;
         Obstackle[i].Obstackle.width = Obstackle[i].width;
         Obstackle[i].Obstackle.x = 600 + (i * OBSTACLE_SPACING); // Space them out
-        Obstackle[i].Obstackle.y = SCREEN_H - 200;   // Bottom obstacles
+        // Obstackle[i].Obstackle.y = SCREEN_H - 200;   // Bottom obstacles
+        RandomiseObsDim(i);
         Obstackle[i].speed = 5;
         Obstackle[i].color = GREEN;
     }
@@ -42,7 +44,8 @@ void InitGame() {
         Obstackle[i].Obstackle.height = Obstackle[i].height;
         Obstackle[i].Obstackle.width = Obstackle[i].width;
         Obstackle[i].Obstackle.x = 600 + ((i - MAX_OBS/2) * OBSTACLE_SPACING); // Space them out
-        Obstackle[i].Obstackle.y = 0;               // Top obstacles
+        // Obstackle[i].Obstackle.y = 0;               // Top obstacles
+        RandomiseObsDim(i);
         Obstackle[i].speed = 5;
         Obstackle[i].color = GREEN;
     }
@@ -83,11 +86,11 @@ void CollisionTest() {
             PlaySound(Hit);
             Player.life--;
             
-            bool trigger = false;
-            for(int i=1; i<=90; ++i){
-                if(i == 90) trigger = true;
-                PlayDeathFlash(trigger);
-            }
+            // bool trigger = false;
+            // for(int i=1; i<=90; ++i){
+            //     if(i == 90) trigger = true;
+            //     PlayDeathFlash(trigger);
+            // }
             
             if(Player.life <= 0) {
                 GameOverMenue();
@@ -106,7 +109,7 @@ void CollisionTest() {
 void RandomiseObsDim(int ith_obs) {
     // Only randomize when bottom obstacles reset (indices 0-4)
     if (ith_obs < MAX_OBS/2) {
-        float gapSize = 150;
+        float gapSize = 200;
         float bottomHeight = GetRandomValue(100, 350);
         float topHeight = SCREEN_H - bottomHeight - gapSize;
         
@@ -163,9 +166,9 @@ void UnloadGame() {
     UnloadSound(PlayerMoveS);
     UnloadSound(Hit);
 
-    // Image
-    UnloadImage(Background);
-    UnloadTexture(BackTexture);
+    // Texture
+    UnloadTexture(BackGR);
+    UnloadTexture(PlayerSprite);
 }
 
 void LoadGame() {
@@ -173,6 +176,7 @@ void LoadGame() {
     PlayerMoveS = LoadSound("assets/sound/player_movement.mp3");
     Hit = LoadSound("assets/sound/hit-by-a-wood.mp3");
 
-    //Image
-    Background = LoadImage("assets/pictures/copied_test.jpeg"); BackTexture = LoadTextureFromImage(Background);
+    // Texture
+    BackGR = LoadTexture("assets/pictures/BG.png");
+    PlayerSprite = LoadTexture("assets/pictures/Player.png");
 }

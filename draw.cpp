@@ -1,15 +1,14 @@
 #include "game.h"
 
+Rectangle PlayerSource = {0.f, 0.f, 0.f, 0.f};
+
 void Draw() {
     BeginDrawing();
     // Beautiful sky gradient background
     ClearBackground((Color){135, 206, 235, 255}); // Sky blue
     
-    // Stretch texture to fit screen width
-    // float scaleX = SCREEN_W / (float)BackTexture.width;
-    // DrawTextureEx(BackTexture, (Vector2){0, 0}, 0.0f, scaleX, WHITE);
-    DrawTexturePro(BackTexture, 
-        (Rectangle){0, 0,(float) BackTexture.width, (float) BackTexture.height}, 
+    DrawTexturePro(BackGR, 
+        (Rectangle){0, 0,(float) BackGR.width, (float) BackGR.height}, 
         (Rectangle){0, 0, SCREEN_W, SCREEN_H}, 
         (Vector2){0, 0}, 0.0f, WHITE);
     
@@ -17,11 +16,23 @@ void Draw() {
     DrawRectangle(0, SCREEN_H - 100, SCREEN_W, 100, (Color){34, 139, 34, 255}); // Forest green ground
     DrawRectangle(0, SCREEN_H - 20, SCREEN_W, 20, (Color){139, 69, 19, 255}); // Saddle brown dirt
     
-    // Enhanced player with shadow
-    DrawRectangleRec((Rectangle){Player.Player.x + 2, Player.Player.y + 2, Player.Player.width, Player.Player.height}, Fade(BLACK, 0.3f)); // Shadow
-    DrawRectangleRec(Player.Player, (Color){255, 215, 0, 255}); // Gold player
-    DrawRectangleLines(Player.Player.x, Player.Player.y, Player.Player.width, Player.Player.height, (Color){255, 140, 0, 255}); // Dark orange border
+    // Initialize PlayerSource if not already done (check if width is 0)
+    if (PlayerSource.width == 0.f && PlayerSprite.width > 0) {
+        PlayerSource.width = (float)PlayerSprite.width / 3.f;
+        PlayerSource.height = (float)PlayerSprite.height / 2.f;
+    }
     
+    // Only draw if texture is loaded - scale sprite to match Player rectangle size
+    if (PlayerSprite.width > 0) {
+        DrawTexturePro(PlayerSprite, 
+            PlayerSource, 
+            (Rectangle){Player.Player.x, Player.Player.y, Player.Player.width, Player.Player.height}, 
+            (Vector2){0, 0}, 
+            0.0f, 
+            WHITE);
+    }
+    else DrawRectangleRec(Player.Player, (Color){255, 215, 0, 255});
+
     // Enhanced obstacles with gradients
     for(int i = 0; i < MAX_OBS; i++) {
         // Shadow
@@ -42,7 +53,7 @@ void Draw() {
     // Lives display
     for(int i = 0; i < Player.life; i++) {
         DrawCircle(SCREEN_W - 50 - (i * 40), 40, 15, (Color){220, 20, 60, 255}); // Red hearts
-        DrawText("♥", SCREEN_W - 60 - (i * 40), 25, 30, WHITE);
+        // DrawText("♥", SCREEN_W - 60 - (i * 40), 25, 30, WHITE);
     }
 
     EndDrawing();

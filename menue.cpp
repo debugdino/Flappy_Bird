@@ -25,11 +25,16 @@ void GameOverMenue() {
         ClearBackground(RAYWHITE);
         
         // Draw frozen game state
-        DrawTexturePro(BackTexture, 
-            (Rectangle){0, 0,(float) BackTexture.width, (float) BackTexture.height}, 
+        DrawTexturePro(BackGR, 
+            (Rectangle){0, 0,(float) BackGR.width, (float) BackGR.height}, 
             (Rectangle){0, 0, SCREEN_W, SCREEN_H}, 
             (Vector2){0, 0}, 0.0f, WHITE);
-        DrawRectangleRec(Player.Player, Player.color);
+        DrawTexturePro(PlayerSprite, 
+            PlayerSource, 
+            (Rectangle){Player.Player.x, Player.Player.y, Player.Player.width, Player.Player.height}, 
+            (Vector2){0, 0}, 
+            0.0f, 
+            WHITE);
         for(int i = 0; i < MAX_OBS; i++) DrawRectangleRec(Obstackle[i].Obstackle, Obstackle[i].color);
 
         // Dark overlay
